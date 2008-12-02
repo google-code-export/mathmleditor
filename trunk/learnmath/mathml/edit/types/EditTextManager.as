@@ -1,4 +1,4 @@
-/*-------------------------------------------------------------
+﻿/*-------------------------------------------------------------
 	Created by: Ionel Alexandru 
 	Mail: ionel.alexandru@gmail.com
 	Site: www.learn-math.info
@@ -39,7 +39,13 @@ class learnmath.mathml.edit.types.EditTextManager implements EditManager{
 	}
 	
 	public function addCharToCurrentPosition(c:String){
-		if(text=="..." | text==" "){
+		var newText = textNode.childNodes[0].nodeValue;
+		if(newText!=text){
+			text = textNode.childNodes[0].nodeValue;
+			sT = new SelectText(textNode);
+			cM = new CursorManager(textNode);			
+		}
+		if(text=="..."){
 			cM.leftString = c;
 			text = c;
 		}else{

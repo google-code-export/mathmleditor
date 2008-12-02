@@ -1,4 +1,4 @@
-/*-------------------------------------------------------------
+﻿/*-------------------------------------------------------------
 	Created by: Ionel Alexandru 
 	Mail: ionel.alexandru@gmail.com
 	Site: www.learn-math.info
@@ -20,7 +20,9 @@ class learnmath.mathml.edit.types.EditMoManager extends EditMBoxManager{
 	public function deleteBox(xml:XML):XMLNode{
 		if(	textNode.parentNode.nodeName=="mover" | 
 			textNode.parentNode.nodeName=="munder" |
+			textNode.parentNode.nodeName=="munderover" |
 			textNode.parentNode.nodeName=="msup" |
+			textNode.parentNode.nodeName=="msubsup" |
 			textNode.parentNode.nodeName=="sub"){
 	
 			var pos = getPosition(textNode);
@@ -32,6 +34,9 @@ class learnmath.mathml.edit.types.EditMoManager extends EditMBoxManager{
 				parent.removeNode();
 				return text;
 			}
+			return null;
+		}else if(textNode.parentNode.nodeName=="munderover" |
+			textNode.parentNode.nodeName=="msubsup"){
 			return null;
 		}
 		return super.deleteBox(xml);

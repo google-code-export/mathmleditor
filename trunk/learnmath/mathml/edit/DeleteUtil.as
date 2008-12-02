@@ -1,4 +1,4 @@
-/*-------------------------------------------------------------
+﻿/*-------------------------------------------------------------
 	Created by: Ionel Alexandru 
 	Mail: ionel.alexandru@gmail.com
 	Site: www.learn-math.info
@@ -18,72 +18,72 @@ class learnmath.mathml.edit.DeleteUtil{
 	
 	public static function deleteGarbage(xml:XML, currentNode:XMLNode){
 		//search for mrow with one child
-		var search:Boolean = true;
-		do{
-			var mrow:XMLNode = getMrowWithOneChild(xml.childNodes[0].childNodes);
-			if(mrow!=null){
-				var parent:XMLNode = mrow.parentNode;
-				var child:XMLNode = mrow.childNodes[0];
-				parent.insertBefore(child, mrow);
-				mrow.removeNode();
-			}else{
-				search = false;
-			}
-		}while(search);
+		//var search:Boolean = true;
+		//do{
+		//	var mrow:XMLNode = getMrowWithOneChildMrow(xml.childNodes[0].childNodes);
+		//	if(mrow!=null){
+		//		var parent:XMLNode = mrow.parentNode;
+		//		var child:XMLNode = mrow.childNodes[0];
+		//		parent.insertBefore(child, mrow);
+		//		mrow.removeNode();
+		//	}else{
+		//		search = false;
+		//	}
+		//}while(search);
 		
-		var search:Boolean = true;
-		do{
-			var mtext:XMLNode = getEmptyMTextNearMText(xml.childNodes);
-			if(mtext!=null){
-				mtext.removeNode();
-			}else{
-				search = false;
-			}
-		}while(search);
-		
+		for(var i=0; i<xml.childNodes.length; i++){
+			mergeMTextNearMText(xml.childNodes[i]);
+		}
 	}
 	
-	public static function getEmptyMTextNearMText(children:Array):XMLNode{
-		if(children==null){
-			return null;
-		}
-		for(var i=0; i<children.length; i++){
-			var parent:XMLNode = children[i].parentNode;
-			if(!(	parent.nodeName=="mfrac" | 
-				parent.nodeName=="mroot" | 
-				parent.nodeName=="munderover" | 
-				parent.nodeName=="munder" | 
-				parent.nodeName=="mover" | 
-				parent.nodeName=="msubsup" | 
-				parent.nodeName=="msub" | 
-				parent.nodeName=="msup")){
-				
-				if(children[i].nodeName=='mtext' & children[i+1].nodeName=='mtext'){
-					if(children[i].childNodes[0].nodeValue=="..." | children[i].childNodes[0].nodeValue=="" | children[i].childNodes[0].nodeValue==" "){
-						return children[i];
-					}
-					if(children[i+1].childNodes[0].nodeValue=="..." | children[i+1].childNodes[0].nodeValue=="" | children[i+1].childNodes[0].nodeValue==" "){
-						return children[i+1];
+	public static function mergeMTextNearMText(child:XMLNode){
+		if(child.nodeName=="mrow" | 
+		   child.nodeName=="merror" | 
+		   child.nodeName=="mfenced" | 
+		   child.nodeName=="msqrt" | 
+		   child.nodeName=="mphantom"){
+			var deletedNodes = new Array();
+			for(var i=0; i<child.childNodes.length; i++){
+				var n1 = child.childNodes[i];
+				var n2 = child.childNodes[i+1];
+				if(n1!=null & n2!=null){
+					if(n1.nodeName=="mtext" & n2.nodeName=="mtext"){
+						// TODO the style must be diferent
+						var t1 = n1.childNodes[0].nodeValue;
+						var t2 = n2.childNodes[0].nodeValue;
+						if(t1=="..."){ t1 = "";}
+						if(t2=="..."){ t2 = "";}
+						t2 = t1 + t2;
+						if(t2==""){ t2 = "...";}
+						n2.childNodes[0].nodeValue = t2;
+						deletedNodes[deletedNodes.length] = n1;
 					}
 				}
 			}
-
-			var s = getEmptyMTextNearMText(children[i].childNodes);
-			if(s!=null) return s;
+			
+			if(deletedNodes.length>0){
+				for(var i=0; i<deletedNodes.length; i++){
+					deletedNodes[i].removeNode();
+				}
+			}
+		}
+		
+		for(var i=0; i<child.childNodes.length; i++){
+			mergeMTextNearMText(child.childNodes[i]);
 		}
 	}
-
-	public static function getMrowWithOneChild(children:Array):XMLNode{
+	
+	public static function getMrowWithOneChildMrow(children:Array):XMLNode{
 		if(children==null){
 			return null;
 		}
 		for(var i=0; i<children.length; i++){
 			var n = children[i];
-			if(n.nodeName=='mrow' & n.childNodes.length==1 & n.childNodes[0].nodeName!="mtable"){
+			if(n.nodeName=='mrow' & n.childNodes.length==1 & n.childNodes[0].nodeName=="mrow"){
 				return n;
 			}
 
-			var s = getMrowWithOneChild(n.childNodes);
+			var s = getMrowWithOneChildMrow(n.childNodes);
 			if(s!=null) return s;
 		}
 	}

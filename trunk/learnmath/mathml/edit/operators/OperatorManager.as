@@ -1,4 +1,4 @@
-/*-------------------------------------------------------------
+﻿/*-------------------------------------------------------------
 	Created by: Ionel Alexandru 
 	Mail: ionel.alexandru@gmail.com
 	Site: www.learn-math.info
@@ -114,8 +114,6 @@ class learnmath.mathml.edit.operators.OperatorManager{
 	}
 
 	public static function insertEndNode(xml:XML, node:XMLNode):XMLNode{
-		var parentOfMtext = node.parentNode;
-		
 		var mtext2:XMLNode = xml.createElement("mtext");
 		var tNode2:XMLNode = xml.createTextNode("...");
 		mtext2.appendChild(tNode2);
@@ -124,6 +122,8 @@ class learnmath.mathml.edit.operators.OperatorManager{
 		var next:XMLNode = node.nextSibling;
 		if(next==null){
 			parentOfMtext.appendChild(mtext2);
+		}else{
+			parentOfMtext.insertBefore(mtext2, next);
 		}
 		return tNode2;
 	}

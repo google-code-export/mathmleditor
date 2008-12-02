@@ -1,4 +1,4 @@
-/*-------------------------------------------------------------
+﻿/*-------------------------------------------------------------
 	Created by: Ionel Alexandru 
 	Mail: ionel.alexandru@gmail.com
 	Site: www.learn-math.info
@@ -93,7 +93,7 @@ class learnmath.mathml.edit.SelectBox{
 			return;
 		}
 		for(var i=0; i<children.length; i++){
-			if(children[i].nodeName=='mtext'){
+			if(children[i].nodeName=='mtext' | children[i].nodeName=='mo'){
 				var box:Box = children[i].attributes["box"];
 				if(children[i].attributes["over"]){
 					DrawRectangle.drawOver(graph, box.finalBounds);
@@ -129,8 +129,18 @@ class learnmath.mathml.edit.SelectBox{
 	public function addCharToCurrentPosition(c:String){
 		if(currentNode.nodeName=="mtext"){
 			init(currentNode.childNodes[0]);
+		}else if(currentNode.nodeName!=null){
+			//verify the next Sibling
+			var next:XMLNode = currentNode.nextSibling;
+			if(next!=null & next.nodeName=="mtext"){
+				init(next.childNodes[0]);
+			}else{
+				var newnode = OperatorManager.insertEndNode(xml, currentNode);
+				init(newnode);
+			}
 		}
 		editManager.addCharToCurrentPosition(c);
+		DeleteUtil.deleteGarbage(xml);
 	}
 	
 	public function deleteRight(){

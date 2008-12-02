@@ -58,10 +58,9 @@ class learnmath.mathml.edit.input.MouseManager{
 			return null;
 		}
 		for(var i=0; i<children.length; i++){
-			if(children[i].nodeName=='mtext'){
+			if(children[i].nodeName=='mtext' | children[i].nodeName=='mo'){
 				var box:Box = children[i].attributes["box"];
 				
-				//trace("moveCursor " + x + " " + y + " " + box.finalBounds);
 				if(box.finalBounds.x<=x & (box.finalBounds.x+box.finalBounds.width)>=x &
 					box.finalBounds.y<=y & (box.finalBounds.y+box.finalBounds.height)>=y){
 					return children[i];
