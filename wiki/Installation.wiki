@@ -1,7 +1,6 @@
 = How to send/receive the mathML value from/to MathML Editor =
 
 We have 3 ways to do the communication:
-  * by *FlashVars*; Example page: _Example FlashVar - editML.html_
-  * by *Javascript*; Example page: _Example Js - editML.html_
-  * by *server*; Example page: _Example Server - editML.html_
-
+  * by *FlashVars*; Example page: <a href="http://www.learn-math.info/mathml/editor/Example%20FlashVar%20-%20editML.html">_Example FlashVar - editML.html_</a>
+  * by *Javascript*; Example page: <a href="http://www.learn-math.info/mathml/editor/Example%20Js%20-%20editML.html">_Example Js - editML.html_</a>
+  * by *server*; Example page: <a href="http://www.learn-math.info/mathml/editor/Example%20Server%20-%20editML.html">_Example Server - editML.html_</a>
