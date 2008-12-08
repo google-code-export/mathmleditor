@@ -1,4 +1,4 @@
-/*-------------------------------------------------------------
+﻿/*-------------------------------------------------------------
 	Created by: Ionel Alexandru 
 	Mail: ionel.alexandru@gmail.com
 	Site: www.learn-math.info
@@ -43,6 +43,7 @@ class learnmath.mathml.EditML{
 	
 
 	public function loadNewXML(xml:String){
+		uniqueId = 1;
 		if(selectBox!=null){
 			selectBox.clearSelection();
 			selectBox.clearCursor(listOfMathML[formulaIndex].dE.mc);
