@@ -1,6 +1,6 @@
 = How to communicate with MathML Editor? =
 
 There is 3 ways to send/receive the mathML value from/to MathML editor:
-  * by *FlashVars* - Example
-  * by *Javascript* - Example
-  * by *server* - Example
+  * by *FlashVars* - <a href="">Example</a>
+  * by *Javascript* - <a href="">Example</a>
+  * by *server* - <a href="">Example</a>
