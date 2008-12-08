@@ -1,0 +1,7 @@
+= How to send/receive the mathML value from/to MathML Editor =
+
+We have 3 ways to do the communication:
+  * by *FlashVars*; Example page: _Example FlashVar - editML.html_
+  * by *Javascript*; Example page: _Example Js - editML.html_
+  * by *server*; Example page: _Example Server - editML.html_
+
