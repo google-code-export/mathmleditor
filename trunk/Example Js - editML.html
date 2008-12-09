@@ -1,69 +1,54 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <title>editML</title>
-<script language="javascript">AC_FL_RunContent = 0;</script>
-<script src="AC_RunActiveContent.js" language="javascript"></script>
 </head>
 <body bgcolor="#eeeeee">
-<!--url's used in the movie-->
-<!--text used in the movie-->
-<!-- saved from url=(0013)about:internet -->
-<script language="javascript">
-	if (AC_FL_RunContent == 0) {
-		alert("This page requires AC_RunActiveContent.js.");
-	} else {
-		AC_FL_RunContent(
-			'codebase', 'http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0',
-			'width', '100%',
-			'height', '100%',
-			'src', 'editML',
-			'quality', 'high',
-			'pluginspage', 'http://www.macromedia.com/go/getflashplayer',
-			'align', 'middle',
-			'play', 'true',
-			'loop', 'true',
-			'scale', 'showall',
-			'wmode', 'window',
-			'devicefont', 'false',
-			'id', 'editML',
-			'bgcolor', '#eeeeee',
-			'name', 'editML',
-			'menu', 'true',
-			'allowFullScreen', 'false',
-			'allowScriptAccess','sameDomain',
-			'movie', 'editML',
-			'FlashVars', 'methodForSaveButton=saveMathML',
-			'salign', ''
-			); //end AC code
-	}
+		<H2>Communication between Javascript and MathML Editor </H2>
+		<a href="javascript:loadMathML()">To load MathML from Javascript. Click here. </a>
+		<p>To get the mathML from the Editor, click on <b>"Save MathML"</b> button, and the javascript method <b>"saveMathML"</b> would be called</p>
 
+	<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="800" height="500" id="editML" align="middle">
+		<param name="movie" value="editML.swf" />
+		<param name="FlashVars" value="methodForSaveButton=saveMathML"/>
+		<param name="allowScriptAccess" value="sameDomain" />
+		<param name="allowFullScreen" value="false" />
+		<param name="quality" value="high" />
+		<param name="bgcolor" value="#eeeeee" />
+			<embed src="editML.swf" quality="high" bgcolor="#eeeeee" width="800" height="500" name="editML" FlashVars="methodForSaveButton=saveMathML" align="middle" allowScriptAccess="sameDomain" allowFullScreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
+	</object>
+
+
+<script language="javascript">
 	function saveMathML(mathML) {
 		alert(mathML);
 	}
 
 	function loadMathML() {
-		document.getElementById("editML").setVariable( "mathMLFromJs", "<mrow><mtext>cos x</mtext></mrow>");
+		var mathMLstring = "<mrow><mtext>cos x</mtext></mrow>";
+		document.getElementById("editML").setVariable( "mathMLFromJs", mathMLstring);
 
 	}
-
-
 </script>
-<noscript>
-	<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=8,0,0,0" width="100%" height="100%" id="editML" align="middle">
-	<param name="movie" value="editML.swf" />
-	<param name="FlashVars" value="urlForSaveButton=save.jsp"/>
-	<param name="allowScriptAccess" value="sameDomain" />
-	<param name="allowFullScreen" value="false" />
-	<param name="quality" value="high" />
-	<param name="bgcolor" value="#eeeeee" />
-		<embed src="editML.swf" quality="high" bgcolor="#eeeeee" width="100%" height="100%" name="editML" FlashVars="methodForSaveButton=saveMathML" align="middle" allowScriptAccess="sameDomain" allowFullScreen="false" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" />
-	</object>
-</noscript>
+	<H3>How to send the mathML string to Editor ?</H3>
+<pre>
+	function loadMathML() {
+		var mathMLstring = "&lt;mrow&gt;&lt;mtext&gt;cos x&lt;/mtext&gt;&lt;/mrow&gt;";
+		document.getElementById("editML").setVariable( <b>"mathMLFromJs"</b>, mathMLstring);
 
-	<br>
-	<center>
-	<a href="javascript:loadMathML()">Load MathML from Javascript</a>
-	</center>
+	}
+</pre>
+	<H3>How to configure the Editor to call a javascript method ?</H3>
+<pre>
+	1. Create javascript method <b>saveMathML</b>
+
+		function saveMathML(mathML) {
+				alert(mathML);
+		}
+
+	2. Put the parameter FlashVars for your flash object and the Editor will call the method <b>saveMathML</b>
+
+		&lt;param name="FlashVars" value="<b>methodForSaveButton=saveMathML</b>"/&gt;
+
+</pre>
 </body>
 </html>
