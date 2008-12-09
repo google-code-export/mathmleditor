@@ -4,6 +4,7 @@
 	Site: www.learn-math.info
 ---------------------------------------------------------------*/
 import learnmath.mathml.formula.*;
+import learnmath.mathml.*;
 import learnmath.mathml.edit.*;
 import learnmath.mathml.edit.types.*;
 import learnmath.mathml.edit.style.*;
@@ -122,8 +123,12 @@ class learnmath.mathml.edit.SelectBox{
 	
 	
 	public function insert(operator:Number){
-		var newNode = editManager.insertOperator(xml, operator);
-		init(newNode);
+		if(operator>=Constant.BCHAR_01 & operator<=Constant.LCHAR_25){
+			addCharToCurrentPosition(CharOperator.getChar(operator));
+		}else{
+			var newNode = editManager.insertOperator(xml, operator);
+			init(newNode);
+		}
 	}
 	
 	public function addCharToCurrentPosition(c:String){
