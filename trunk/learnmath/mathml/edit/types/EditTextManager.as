@@ -1,4 +1,4 @@
-﻿/*-------------------------------------------------------------
+/*-------------------------------------------------------------
 	Created by: Ionel Alexandru 
 	Mail: ionel.alexandru@gmail.com
 	Site: www.learn-math.info
@@ -160,8 +160,8 @@ class learnmath.mathml.edit.types.EditTextManager implements EditManager{
 	}
 
 	
-	public function changeStyle(style:Style, defaultStyle:Style){
-		CustomStyleManager.changeStyleForNode(textNode, style, defaultStyle);
+	public function changeStyle(style:Style){
+		CustomStyleManager.changeStyleForNode(textNode, style);
 	}
 	
 }

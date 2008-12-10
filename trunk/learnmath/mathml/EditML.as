@@ -8,6 +8,7 @@ import learnmath.mathml.formula.util.*;
 import learnmath.mathml.edit.*;
 import learnmath.mathml.edit.input.*;
 import learnmath.mathml.*;
+import learnmath.mathml.edit.style.*;
 import flash.geom.*;
 
 
@@ -42,7 +43,8 @@ class learnmath.mathml.EditML{
 	}
 	
 
-	public function loadNewXML(xml:String){
+	public function loadNewXML(xml:String, defaultStyle:Style){
+		_defaultStyle = defaultStyle.getCopy();
 		uniqueId = 1;
 		if(selectBox!=null){
 			selectBox.clearSelection();
@@ -84,6 +86,9 @@ class learnmath.mathml.EditML{
 		
 		var x = listOfXml[i].childNodes[0].attributes["x"];
 		var y = listOfXml[i].childNodes[0].attributes["y"];
+		if(listOfXml[i].childNodes[0].childNodes[0]!=null){
+			CustomStyleManager.setDefaultForNode(listOfXml[i].childNodes[0].childNodes[0], _defaultStyle);
+		}
 		listOfMathML[i].drawFormula(getDragablePannel(i, x, y), style);
 	}
 
@@ -190,7 +195,7 @@ class learnmath.mathml.EditML{
 	}
 
 	public function changeStyle(style:Style){
-		selectBox.changeStyle(style, _defaultStyle)
+		selectBox.changeStyle(style)
 		needReDraw = true;
 	}
 	
@@ -259,6 +264,9 @@ class learnmath.mathml.EditML{
 		return displayMathML.getLine();
 	}
 	
+	public function getStyleForCurrentNode():Style{
+		return selectBox.getStyleForCurrentNode();
+	}
 	
 	function getNewFormula(style:Style){
 		return '<m:math xmlns:m="http://www.w3.org/1998/Math/MathML"><mrow fontsize="'+style.size+'" fontfamily="'+style.font+'"><mtext>...</mtext></mrow></math>';

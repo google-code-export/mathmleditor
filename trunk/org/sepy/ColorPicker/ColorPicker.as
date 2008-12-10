@@ -496,7 +496,7 @@ class org.sepy.ColorPicker.ColorPicker extends MovieClip {
         advancedColorPanel.removeMovieClip();
     }
 
-    private function changed(value:String)
+    public function changed(value:String)
     {
         if(value.charAt(0) == "#")
         {

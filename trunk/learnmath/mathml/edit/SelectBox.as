@@ -140,6 +140,8 @@ class learnmath.mathml.edit.SelectBox{
 			if(next!=null & next.nodeName=="mtext"){
 				init(next.childNodes[0]);
 			}else{
+				if(currentNode.parentNode.nodeName=="math" | currentNode.parentNode.nodeName=="m:math") return;
+				
 				var newnode = OperatorManager.insertEndNode(xml, currentNode);
 				init(newnode);
 			}
@@ -203,6 +205,7 @@ class learnmath.mathml.edit.SelectBox{
 	}
 
 	public function goUp(selection:Boolean){
+		if(currentNode.parentNode.nodeName=="math" | currentNode.parentNode.nodeName=="m:math") return;
 		var newNode = editManager.goUp(selection);
 		init(newNode);
 	}
@@ -280,17 +283,17 @@ class learnmath.mathml.edit.SelectBox{
 		}
 	}
 	
-	public function changeStyle(style:Style, defaultStyle:Style){
+	public function changeStyle(style:Style){
 		var isInText = editManager instanceof EditTextManager;
 		if(isInText & EditTextManager(editManager).text!="..." & EditTextManager(editManager).text!=""){
 			
-			if(CustomStyleManager.isStyleChanged(currentNode.parentNode, style, defaultStyle)){
+			if(CustomStyleManager.isStyleChanged(currentNode.parentNode, style)){
 				// add a new text box
 				var newNode = OperatorManager.addNewSiblingTextChild(xml, currentNode.parentNode);
 				init(newNode);
 			}
 		}
-		editManager.changeStyle(style, defaultStyle);
+		editManager.changeStyle(style);
 	}
 	
 	function verifyIsAlive(node:XMLNode):Boolean{
@@ -306,5 +309,10 @@ class learnmath.mathml.edit.SelectBox{
 			if(ret) return true;
 		}
 	}
+	
+	public function getStyleForCurrentNode():Style{
+		return CustomStyleManager.getStyleForCurrentNode(currentNode);
+	}
+	
 
 }

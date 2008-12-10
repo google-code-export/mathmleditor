@@ -1,4 +1,4 @@
-/*-------------------------------------------------------------
+﻿/*-------------------------------------------------------------
 	Created by: Ionel Alexandru 
 	Mail: ionel.alexandru@gmail.com
 	Site: www.learn-math.info
@@ -116,8 +116,8 @@ class learnmath.mathml.edit.types.EditMBoxManager implements EditManager{
 	}
 
 	
-	public function changeStyle(style:Style, defaultStyle:Style){
-		CustomStyleManager.changeStyleForNode(textNode, style, defaultStyle);
+	public function changeStyle(style:Style){
+		CustomStyleManager.changeStyleForNode(textNode, style);
 	}
 	
 	public function getPosition(node:XMLNode):Number{

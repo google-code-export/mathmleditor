@@ -1,4 +1,4 @@
-/*-------------------------------------------------------------
+﻿/*-------------------------------------------------------------
 	Created by: Ionel Alexandru 
 	Mail: ionel.alexandru@gmail.com
 	Site: www.learn-math.info
@@ -21,5 +21,5 @@ interface learnmath.mathml.edit.types.EditManager{
 	public function goDown(selection:Boolean):XMLNode;
 	public function insertOperator(xml:XML, operator:Number):XMLNode;
 
-	public function changeStyle(style:Style, defaultStyle:Style);
+	public function changeStyle(style:Style);
 }

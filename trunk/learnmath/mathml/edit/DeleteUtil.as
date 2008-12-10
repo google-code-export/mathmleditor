@@ -49,14 +49,16 @@ class learnmath.mathml.edit.DeleteUtil{
 				if(n1!=null & n2!=null){
 					if(n1.nodeName=="mtext" & n2.nodeName=="mtext"){
 						// TODO the style must be diferent
-						var t1 = n1.childNodes[0].nodeValue;
-						var t2 = n2.childNodes[0].nodeValue;
-						if(t1=="..."){ t1 = "";}
-						if(t2=="..."){ t2 = "";}
-						t2 = t1 + t2;
-						if(t2==""){ t2 = "...";}
-						n2.childNodes[0].nodeValue = t2;
-						deletedNodes[deletedNodes.length] = n1;
+						if(CustomStyleManager.hasSameStyle(n1, n2)){
+							var t1 = n1.childNodes[0].nodeValue;
+							var t2 = n2.childNodes[0].nodeValue;
+							if(t1=="..."){ t1 = "";}
+							if(t2=="..."){ t2 = "";}
+							t2 = t1 + t2;
+							if(t2==""){ t2 = "...";}
+							n2.childNodes[0].nodeValue = t2;
+							deletedNodes[deletedNodes.length] = n1;
+						}
 					}
 				}
 			}
