@@ -1,4 +1,5 @@
 #Building the project.
 
-# You must upgrade Flash CS4 with "Adobe Flash CS4 Professional Update (10.0.2)" to build large projects;<br>
+# You must upgrade Flash CS4 with "Adobe Flash CS4 Professional Update (10.0.2)" to build large projects;
+
 # You must add in "External library path" the component myLib.swc from the folder "components". MyLib is a library from http://mylib.samystudio.net/. Thanks Samuel. 
