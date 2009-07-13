@@ -68,6 +68,10 @@ public class ToolbarBean{
 		iconList[iconList.length] = c;
 	}
 
+	public function addSpace():void{
+		iconList[iconList.length] = 3;
+	}
+	
 	public function addColorPicker(eventId:String):void{
 
 		var color:MyColorPicker = new MyColorPicker();

@@ -7,7 +7,7 @@
 	<h3></h3>
 
 	<div id="Div1" style="width:200;height:200;">
-		<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=10,0,0,0" width="100%" height="100%" id="editML" align="middle">
+		<object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=10,0,0,0" width="100%" height="100%" id="editML" name="editML" align="middle">
 			<param name="allowScriptAccess" value="always"/>
 			<param name="allowFullScreen" value="true"/>
 			<param name="loop" value="false"/>
@@ -20,6 +20,7 @@
 				quality="high"
 				width="100%"
 				height="100%"
+				id="editML"
 				name="editML"
 				align="middle"
 				allowScriptAccess="always"
@@ -28,7 +29,9 @@
 				pluginspage="http://www.adobe.com/go/getflashplayer" />
 		</object>
 	</div>
-
+	<script>
+		getElement('editML').focus();
+	</script>
 
 <h3></h3>
 </center>

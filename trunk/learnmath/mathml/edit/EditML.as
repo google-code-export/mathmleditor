@@ -210,6 +210,7 @@ public class EditML{
 	
 	public function getMathML():XML{
 		var value:XML = new XML(xml.toXMLString());
+		DeleteUtil.deleteGarbage(value);
 		filterAll(value);
 		return value;
 	}

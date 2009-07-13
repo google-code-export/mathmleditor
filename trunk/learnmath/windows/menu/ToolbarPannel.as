@@ -151,53 +151,64 @@ public class ToolbarPannel extends Pannel{
 			}
 			
 			for(var j:int=0; j<toolbar.iconList.length; j++){
-				var iconMc:MovieClip = toolbar.iconList[j];
-				var contIcon:MovieClip = new MovieClip();
-				contIcon.addChild(iconMc);
-
-				if(iconMc.isIcon){
-					contIcon.removeEventListener(MouseEvent.MOUSE_DOWN, clickedIcon);
-					contIcon.addEventListener(MouseEvent.MOUSE_DOWN, clickedIcon);
-				}
-				if(iconMc.combo!=null){
-					iconMc.combo.removeEventListener("change", changeComboBox);
-					iconMc.combo.addEventListener("change", changeComboBox);
-				}
-				if(iconMc.colorComp!=null){
-					iconMc.colorComp.removeEventListener("change", changeColor);
-					iconMc.colorComp.addEventListener("change", changeColor);
-				}
-
-				var w = iconMc.customWidth;
-				var h = iconMc.customHeight;
-				
-				if(iconMc.combo!=null){
-					if(position=="BOTTOM"){
-						iconMc.combo.openDirection = "up";
-					}else{
-						iconMc.combo.openDirection = "down";
+				var obj = toolbar.iconList[j];
+				if(obj is MovieClip){
+					var iconMc:MovieClip = MovieClip(obj);
+					var contIcon:MovieClip = new MovieClip();
+					contIcon.addChild(iconMc);
+	
+					if(iconMc.isIcon){
+						contIcon.removeEventListener(MouseEvent.MOUSE_DOWN, clickedIcon);
+						contIcon.addEventListener(MouseEvent.MOUSE_DOWN, clickedIcon);
 					}
-				}
-				if(iconMc.colorComp!=null){
-					if(position=="BOTTOM"){
-						iconMc.colorComp.openDirection = "up";
-					}else{
-						iconMc.colorComp.openDirection = "bottom";
+					if(iconMc.combo!=null){
+						iconMc.combo.removeEventListener("change", changeComboBox);
+						iconMc.combo.addEventListener("change", changeComboBox);
 					}
-				}				
-				
-				if(position=="TOP" || position=="BOTTOM"){
-					contIcon.x = nextX;
-					contIcon.y = 0;
-					handle.addChild(contIcon);
-					nextX = nextX + w + 2;
-					if( (totalX + nextX + 22)>maxWidth ) return;
-				}else if(position=="LEFT" || position=="RIGHT"){
-					contIcon.x = 0;
-					contIcon.y = nextY;
-					handle.addChild(contIcon);
-					nextY = nextY + h + 2;
-					if( (totalY + nextY + 22)>_h ) return;
+					if(iconMc.colorComp!=null){
+						iconMc.colorComp.removeEventListener("change", changeColor);
+						iconMc.colorComp.addEventListener("change", changeColor);
+					}
+	
+					var w = iconMc.customWidth;
+					var h = iconMc.customHeight;
+					
+					if(iconMc.combo!=null){
+						if(position=="BOTTOM"){
+							iconMc.combo.openDirection = "up";
+						}else{
+							iconMc.combo.openDirection = "down";
+						}
+					}
+					if(iconMc.colorComp!=null){
+						if(position=="BOTTOM"){
+							iconMc.colorComp.openDirection = "up";
+						}else{
+							iconMc.colorComp.openDirection = "bottom";
+						}
+					}				
+					
+					if(position=="TOP" || position=="BOTTOM"){
+						contIcon.x = nextX;
+						contIcon.y = 0;
+						handle.addChild(contIcon);
+						nextX = nextX + w + 2;
+						if( (totalX + nextX + 22)>maxWidth ) return;
+					}else if(position=="LEFT" || position=="RIGHT"){
+						contIcon.x = 0;
+						contIcon.y = nextY;
+						handle.addChild(contIcon);
+						nextY = nextY + h + 2;
+						if( (totalY + nextY + 22)>_h ) return;
+					}
+				}else if(obj is Number){
+					if(position=="TOP" || position=="BOTTOM"){
+						nextX = nextX + obj + 2;
+						if( (totalX + nextX + 22)>maxWidth ) return;
+					}else if(position=="LEFT" || position=="RIGHT"){
+						nextY = nextY + obj + 2;
+						if( (totalY + nextY + 22)>_h ) return;
+					}
 				}
 			}
 
@@ -226,9 +237,15 @@ public class ToolbarPannel extends Pannel{
 	private function drawHBar(totalY:int, toolbar:ToolbarBean, maxH:int):MovieClip{
 		var maxY = 10;
 		for(var j:int=0; j<toolbar.iconList.length; j++){
-			var iconMc = toolbar.iconList[j];
-			if((totalY + maxY + iconMc.height + 22)>maxH) break;
-			maxY = maxY + iconMc.height + 2;
+				var obj = toolbar.iconList[j];
+				if(obj is MovieClip){
+					var iconMc:MovieClip = MovieClip(obj);
+					if((totalY + maxY + iconMc.customHeight + 22)>maxH) break;
+					maxY = maxY + iconMc.customHeight + 2;
+				}else if(obj is Number){
+					if((totalY + maxY + obj + 22)>maxH) break;
+					maxY = maxY + obj + 2;
+				}
 		}
 		var back:MovieClip = new MovieClip();
 		back.graphics.lineStyle();
@@ -271,9 +288,15 @@ public class ToolbarPannel extends Pannel{
 	private function drawVBar(totalX:int, toolbar:ToolbarBean):MovieClip{
 		var maxX = 10;
 		for(var j:int=0; j<toolbar.iconList.length; j++){
-			var iconMc = toolbar.iconList[j];
-			if((totalX + maxX + iconMc.width + 22)>maxWidth) break;
-			maxX = maxX + iconMc.width + 2;
+				var obj = toolbar.iconList[j];
+				if(obj is MovieClip){
+					var iconMc:MovieClip = MovieClip(obj);
+					if((totalX + maxX + iconMc.customWidth + 22)>maxWidth) break;
+					maxX = maxX + iconMc.customWidth + 2;
+				}else if(obj is Number){
+					if((totalX + maxX + obj + 22)>maxWidth) break;
+					maxX = maxX + obj + 2;
+				}
 		}
 		var back:MovieClip = new MovieClip();
 		back.graphics.lineStyle();

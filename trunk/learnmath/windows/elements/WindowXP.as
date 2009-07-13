@@ -12,7 +12,6 @@ import flash.events.*;
 import flash.geom.*;
 import flash.text.*;
 import flash.ui.*;
-import fl.containers.*;
 
 
 public class WindowXP extends Pannel{
@@ -21,7 +20,8 @@ public class WindowXP extends Pannel{
 	public var titleBar:MovieClip;
 	var color1:MovieClip;
 	var color2:MovieClip;
-	
+	public var buttonClose;
+		
 	public var name:String;
 	private var tf:TextFormat;
 	
@@ -86,13 +86,6 @@ public class WindowXP extends Pannel{
 		color1.graphics.drawRect( 0, 0, width-7, 18);
 		color1.graphics.endFill();
 
-		//colors = [0x858480, 0xc0bfbb];
-		//color2.graphics.lineStyle();
-		//color2.graphics.beginGradientFill(GradientType.LINEAR, colors, [1, 1], [0, 255], matr, SpreadMethod.PAD);  
-		//color2.graphics.drawRect( 0, 0, width-7, 18);
-		//color2.graphics.endFill();
-
-
 		titleBar.addChild(littleIcon);
 		littleIcon.mouseEnabled = false;
 		littleIcon.x=1;
@@ -107,6 +100,7 @@ public class WindowXP extends Pannel{
 		t.mouseEnabled = false;
 		titleBar.addChild(t);
 		
+		buttonClose = new ButtonCloseXP(titleBar, width-25, 2);
 
 		titleBar.buttonMode = true;
 		titleBar.mouseEnabled = true;

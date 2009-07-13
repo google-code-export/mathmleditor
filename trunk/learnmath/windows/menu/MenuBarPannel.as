@@ -1,4 +1,4 @@
-package learnmath.windows.menu{
+﻿package learnmath.windows.menu{
 /*-------------------------------------------------------------
 	Created by: Ionel Alexandru 
 	Mail: ionel.alexandru@gmail.com
@@ -14,10 +14,9 @@ import learnmath.windows.util.*;
 
 public class MenuBarPannel extends BorderPannel{
 
-	private var displaySubPannel:Boolean = false;
 	private var menuGroupPannel:MenuGroupPannel;
 	private var currentButonMC:MovieClip;
-	
+
 
 	public function MenuBarPannel(_parent:MovieClip, _x:int, _y:int, _width:int, menuBar:MenuBar){
 		super(_parent, _x, _y, _width, 22);
@@ -41,6 +40,7 @@ public class MenuBarPannel extends BorderPannel{
 		pannel.graphics.moveTo(0,21);
 		pannel.graphics.lineTo(width, 21);
 
+		parent.addEventListener(MouseEvent.MOUSE_DOWN, clicked);
 		
 	}
 	
@@ -76,24 +76,25 @@ public class MenuBarPannel extends BorderPannel{
 	}
 
 	private function clicked(event:MouseEvent):void {
-		var mc = event.target;
-		if(displaySubPannel){
-			displaySubPannel = false;
-			removeSubmenu(mc);
-			drawButtonUP(mc);
-		}else{
-			displaySubPannel = true;
-			drawSubmenu(mc);
+		if(currentButonMC==null && menuGroupPannel!=null){
+			removeSubmenu();
+			return;
 		}
-		
+		if(currentButonMC==null){
+			return;
+		}
+		removeSubmenu();
+		drawSubmenu();
 	}
 
 	private function drawOut(event:MouseEvent):void {
 		var mc = event.target;
 		drawNormal(mc);
+		currentButonMC = null;
 	}
 	
 	private function drawNormal(mc:MovieClip):void {
+		if(mc==null) return;
 		mc.graphics.lineStyle();
 		mc.graphics.beginFill(0xd4cfc9);   
 		mc.graphics.drawRect(0, 0, mc.maxWidth-1, 18);   
@@ -103,18 +104,19 @@ public class MenuBarPannel extends BorderPannel{
 	
 	private function drawOver(event:MouseEvent):void {
 		var mc = event.target;
-		if(!displaySubPannel){
+		if(mc==currentButonMC) return;
+
+		currentButonMC = mc;
+		if(menuGroupPannel==null){
 			drawButtonUP(mc);
 		}else{
 			drawButtonDOWN(mc);
 			if(menuGroupPannel!=null){
-				pannel.removeChild(menuGroupPannel.pannel);
+				parent.removeChild(menuGroupPannel.pannel);
+				menuGroupPannel = null;
 			}
 			if(mc.menuGroup.itemList.length>0){
-				menuGroupPannel = new MenuGroupPannel(pannel, mc.x, 19, mc.menuGroup, this);
-				currentButonMC = mc;
-			}else{
-				menuGroupPannel = null;
+				menuGroupPannel = new MenuGroupPannel(parent, pannel.x+ mc.x, pannel.y+19, mc.menuGroup, this);
 			}
 		}
 	}		
@@ -148,28 +150,23 @@ public class MenuBarPannel extends BorderPannel{
 		mc.graphics.lineTo(0, 17);
 	}		
 
-	private function removeSubmenu(mc:MovieClip):void {
-		if(mc.menuGroup.itemList.length>0 && menuGroupPannel!=null){
-			pannel.removeChild(menuGroupPannel.pannel);
+	public function removeSubmenu():void {
+		if(menuGroupPannel!=null){
+			parent.removeChild(menuGroupPannel.pannel);
 			menuGroupPannel = null;
+			drawNormal(currentButonMC);
 		}		
 	}
 	
-	private function drawSubmenu(mc:MovieClip):void {
-		drawButtonDOWN(mc);
-		if(mc.menuGroup.itemList.length>0){
-			menuGroupPannel = new MenuGroupPannel(pannel, mc.x, 19, mc.menuGroup, this);
-			currentButonMC = mc;
+	private function drawSubmenu():void {
+		drawButtonDOWN(currentButonMC);
+		if(currentButonMC.menuGroup.itemList.length>0){
+			menuGroupPannel = new MenuGroupPannel(parent, pannel.x+ currentButonMC.x, pannel.y+19, currentButonMC.menuGroup, this);
 		}		
 	}
 
 	public function menuClicked(id:String):void {
-		if(displaySubPannel){
-			displaySubPannel = false;
-			pannel.removeChild(menuGroupPannel.pannel);
-			menuGroupPannel = null;
-			drawNormal(currentButonMC);		
-		}
+		removeSubmenu();
 		pannel.dispatchEvent(new MenuCustomEvent(id));
 	}
 

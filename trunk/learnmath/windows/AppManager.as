@@ -37,5 +37,10 @@ public class AppManager{
 		mainPannel.processKey(e)
 	}
 	
+	public static function setMathML(mathML:String) {
+		if(mainPannel==null) return;
+		mainPannel.setMathML(mathML);
+	}	
+	
 }
 }
