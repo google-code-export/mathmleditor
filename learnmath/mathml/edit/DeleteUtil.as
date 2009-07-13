@@ -1,4 +1,4 @@
-package learnmath.mathml.edit{
+﻿package learnmath.mathml.edit{
 /*-------------------------------------------------------------
 	Created by: Ionel Alexandru 
 	Mail: ionel.alexandru@gmail.com
@@ -16,34 +16,34 @@ import learnmath.mathml.edit.style.*;
 */
 public class DeleteUtil{
 	
-	public static function deleteGarbage(xml:XML, currentNode:XML):void{
+	public static function deleteGarbage(xml:XML):void{
 		//search for mrow with one child
-//		var search:Boolean = true;
-//		do{
-//			var mrow:XML = getMrowWithOneChildMrow(xml.children());
-//			if(mrow!=null){
-//				
-//				var parent:XML = mrow.parent();
-//				var child:XML = mrow.children()[0];
-//				parent.appendChild(child);
-//				
-//				delete mrow.parent().children()[ mrow.childIndex() ];
-//			}else{
-//				search = false;
-//			}
-//		}while(search);
+		var search:Boolean = true;
+		do{
+			var mrow:XML = getMrowWithOneChildMrow(xml.children());
+			if(mrow!=null){
+				var parent:XML = mrow.parent();
+				var child:XML = mrow.children()[0];
+				parent.appendChild(child);
+				
+				delete mrow.parent().children()[ mrow.childIndex() ];
+			}else{
+				search = false;
+			}
+		}while(search);
 		
 	}
 	
 	
-	public static function getMrowWithOneChildMrow(children:XMLList):XML{
+	private static function getMrowWithOneChildMrow(children:XMLList):XML{
 		if(children==null){
 			return null;
 		}
-		for(var i:int=0; i<children.length; i++){
+		for(var i:int=0; i<children.length(); i++){
 			var n:XML = children[i];
+			if(n.localName()==null) continue;
 			
-			if(n.localName()=='mrow' && n.children().length==1 && n.children()[0].localName()=="mrow"){
+			if(n.localName().toLowerCase()=='mrow' && n.children().length()==1 && n.children()[0].localName().toLowerCase()=="mrow"){
 				return n;
 			}
 

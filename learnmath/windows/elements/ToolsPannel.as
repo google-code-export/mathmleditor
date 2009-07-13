@@ -12,7 +12,6 @@ import flash.events.*;
 import flash.geom.*;
 import flash.text.*;
 import flash.ui.*;
-import fl.containers.*;
 
 
 public class ToolsPannel extends WindowXP{

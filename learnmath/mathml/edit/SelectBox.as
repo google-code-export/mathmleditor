@@ -1,4 +1,4 @@
-package learnmath.mathml.edit{
+﻿package learnmath.mathml.edit{
 /*-------------------------------------------------------------
 	Created by: Ionel Alexandru 
 	Mail: ionel.alexandru@gmail.com
@@ -30,7 +30,7 @@ public class SelectBox{
 		if(selected!=null){
 			init(selected);
 		}else{
-			var textNodeSelected:XML = selectFirstText(xml.children());
+			var textNodeSelected:XML = selectFirstText(xml);
 			if(textNodeSelected==null){
 				init(_xmlML);
 			}else{
@@ -116,19 +116,22 @@ public class SelectBox{
 		return res;
 	}
 	
-	public function selectFirstText(children:XMLList):XML{
-		if(children==null){
+	public function selectFirstText(node:XML):XML{
+		if(node==null){
 			return null;
 		}
+		if(node.localName()!=null){
+			var name:String = node.localName().toLowerCase();
+			if(name=='mtext' || name=='mn' || name=='mi'){
+				return node;
+			}
+		}
+		
+		var children:XMLList = node.children();
 		for(var i:int=0; i<children.length(); i++){
 			if(children[i].localName()==null) continue;
 			
-			var name:String = children[i].localName().toLowerCase();
-			if(name=='mtext' || name=='mn' || name=='mi'){
-				return children[i];
-			}
-
-			var s:XML = selectFirstText(children[i].children());
+			var s:XML = selectFirstText(children[i]);
 			if(s!=null) return s;
 		}
 		return null
@@ -192,7 +195,13 @@ public class SelectBox{
 		}else{
 			newNode = XMLUtil.replaceNodeAndInsert(child, currentNode);
 		}
-		init(newNode);
+		
+		var textNodeSelected:XML = selectFirstText(newNode);
+		if(textNodeSelected==null){
+			init(newNode);
+		}else{
+			init(textNodeSelected);
+		}		
 	}
 	
 	public function insertToEnd(child:XML):void{
@@ -218,7 +227,6 @@ public class SelectBox{
 			nextNode = editManager.deleteRight(xml);
 		}else{
 			nextNode = editManager.deleteRight(xml);
-			DeleteUtil.deleteGarbage(xml, nextNode);
 		}
 		init(nextNode);
 	}
@@ -229,7 +237,6 @@ public class SelectBox{
 			nextNode = editManager.deleteLeft(xml);
 		}else{
 			nextNode = editManager.deleteLeft(xml);
-			DeleteUtil.deleteGarbage(xml, nextNode);
 		}
 		init(nextNode);
 	}

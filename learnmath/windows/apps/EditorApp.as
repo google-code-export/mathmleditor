@@ -35,6 +35,8 @@ public class EditorApp extends WindowXP{
 	var workingPannelH;
 	
 	var toolbarsManager:Toolbars = new Toolbars();
+	
+	var isSaved:Boolean = true;
 
 	public function EditorApp(parent:MovieClip, x:int, y:int, _width:int, _height:int){
 		name = "MathML Editor";
@@ -92,20 +94,23 @@ public class EditorApp extends WindowXP{
 		tool1.addElement(new Matrix6(19, 19), "toolbar_Matrix", true);
 		tool1.addElement(new LittleChar11(18, 19), "toolbar_CharsL", true);
 		tool1.addElement(new BigChar21(18, 19), "toolbar_CharsB", true);
-
+		tool1.addSpace();
 
 		var tool2:ToolbarBean = new ToolbarBean();
-		tool2.addElement(new NewIcon(18, 19), "menu_file_new", false);
+		tool2.addElement(new NewIcon(18, 19), "menu_file_new", true);
 		tool2.addElement(new OpenIcon(19, 19), "menu_file_open", true);
 		tool2.addElement(new SaveIcon(18, 19), "menu_file_save", false);
+		tool2.addSpace();
 
 		var tool3:ToolbarBean = new ToolbarBean();
 		tool3.addElement(new CutIcon(19, 19), "menu_edit_cut", true);
 		tool3.addElement(new CopyIcon(19, 19), "menu_edit_copy", true);
 		tool3.addElement(new PasteIcon(18, 19), "menu_edit_paste", false);
+		tool3.addSpace();
 		tool3.addElement(new UndoIcon(19, 19), "menu_edit_undo", false);
 		tool3.addElement(new RedoIcon(19, 19), "menu_edit_redo", false);
-
+		tool3.addSpace();
+		
 		var tool4:ToolbarBean = new ToolbarBean();
 		tool4.acceptedPosition = "TOP;BOTTOM"
 		var textTypes = new Array();
@@ -136,10 +141,13 @@ public class EditorApp extends WindowXP{
 		textSizes[textSizes.length]={label: "40", data:"40"};
 		tool4.addSelectField("menu_style_size", true, textSizes, 4);
 
+		tool4.addSpace();
 		tool4.addElement(new Bold(19, 19), "menu_style_bold", true);
 		tool4.addElement(new Italic(19, 19), "menu_style_italic", true);
+		tool4.addSpace();
 		tool4.addColorPicker("menu_style_color");
-
+		tool4.addSpace();
+		
 		toolbars.addToolbar(tool2);
 		toolbars.addToolbar(tool3);
 		toolbars.addToolbar(tool4);
@@ -190,13 +198,18 @@ public class EditorApp extends WindowXP{
 		
 		toolbarsManager.redrawToolbars(pannel);
 
-		
+		buttonClose.pannel.addEventListener(MouseEvent.CLICK, closeWindow);		
 	}
 	
 	public override function processKey(event:KeyboardEvent):void {
 			//trace("keyboard event: " + event.ctrlKey + " " + event.keyCode);
         editor.processKey(event, style);
+		isSaved = false;
 		updateIcons()
+    }	
+
+	public function closeWindow(event:MouseEvent):void {
+		closeAction();
     }	
 
 	public override function executeMenu(event:MenuCustomEvent):void {
@@ -206,26 +219,28 @@ public class EditorApp extends WindowXP{
 			
 		}else if(event.menuId.indexOf("toolbar_")==0){
 			toolbarsManager.drawToolbar(pannel, event.menuId, event.target.x, event.target.x + 20);
+		}else if(event.menuId =="menu_file_close"){
+			closeAction();
 		}else if(event.menuId =="menu_file_new"){
 			editor.newFormula();			
 		}else if(event.menuId =="menu_file_open"){
-			var ret:String = String(ExternalInterface.call("getMathML"));
-			if(ret==null || ret.length==0 || ret=='null') return;
-			editor.clear();
-			editor.insert(ret);
+			openAction();
 		}else if(event.menuId =="menu_file_save"){
-			var value = editor.getMathMLString();
-			ExternalInterface.call("saveMathML", value);
+			saveAction();
 		}else if(event.menuId=="menu_edit_cut"){
 			editor.cut();
 		}else if(event.menuId=="menu_edit_copy"){
 			editor.copy();
+			isSaved = false;
 		}else if(event.menuId=="menu_edit_paste"){
 			editor.paste();
+			isSaved = false;
 		}else if(event.menuId=="menu_edit_redo"){
 			editor.redo();
+			isSaved = false;
 		}else if(event.menuId=="menu_edit_undo"){
 			editor.undo();
+			isSaved = false;
 		}
 		updateIcons();		
 	}
@@ -253,23 +268,23 @@ public class EditorApp extends WindowXP{
 		}else if(event.menuId=="menu_file_new"){
 			editor.newFormula();
 		}else if(event.menuId=="menu_file_open"){
-			var ret:String = String(ExternalInterface.call("getMathML"));
-			if(ret==null || ret.length==0 || ret=='null') return;
-			editor.clear();
-			editor.insert(ret);
+			openAction();
 		}else if(event.menuId=="menu_file_save"){
-			var value = editor.getMathMLString();
-			ExternalInterface.call("saveMathML", value);
+			saveAction();
 		}else if(event.menuId=="menu_edit_cut"){
 			editor.cut();
 		}else if(event.menuId=="menu_edit_copy"){
 			editor.copy();
+			isSaved = false;
 		}else if(event.menuId=="menu_edit_paste"){
 			editor.paste();
+			isSaved = false;
 		}else if(event.menuId=="menu_edit_redo"){
 			editor.redo();
+			isSaved = false;
 		}else if(event.menuId=="menu_edit_undo"){
 			editor.undo();
+			isSaved = false;
 		}else if(event.menuId=="menu_style_bold"){
 			if(style.fontweight==null){
 				style.fontweight = "bold";
@@ -279,6 +294,7 @@ public class EditorApp extends WindowXP{
 				toolbars.iconMap["menu_style_bold"].changeIcon("menu_style_bold", new Bold(19, 19));
 			}
 			editor.changeStyle(style);
+			isSaved = false;
 		}else if(event.menuId=="menu_style_italic"){
 			if(style.fontstyle==null){
 				style.fontstyle = "italic";
@@ -288,19 +304,39 @@ public class EditorApp extends WindowXP{
 				toolbars.iconMap["menu_style_italic"].changeIcon("menu_style_italic", new Italic(19, 19));
 			}
 			editor.changeStyle(style);
+			isSaved = false;
 		}else if(event.menuId=="menu_style_family"){
 			style.font=event.value;
 			editor.changeStyle(style);
+			isSaved = false;
 		}else if(event.menuId=="menu_style_size"){
 			style.size=int(event.value);
 			editor.changeStyle(style);
+			isSaved = false;
 		}else if(event.menuId=="menu_style_color"){
 			style.color = event.value;
 			editor.changeStyle(style);
+			isSaved = false;
 		}
 		updateIcons();
 	}
 	
+	
+	public function openAction() {
+			var ret:String = String(ExternalInterface.call("getMathMLFromJavascript"));
+			if(ret==null || ret.length==0 || ret=='null') return;
+			editor.newFormula();
+			editor.insert(ret);		
+	}
+	public function closeAction() {
+			var value = editor.getMathMLString();
+			ExternalInterface.call("closeEditorWithJavascript", value);		
+	}
+	public function saveAction() {
+			var value = editor.getMathMLString();
+			ExternalInterface.call("saveMathMLToJavascript", value);
+			isSaved = true;
+	}
 	
 	public function redraw(event:RedrawToolbarsEvent):void {
 		super.draw();
@@ -309,6 +345,7 @@ public class EditorApp extends WindowXP{
 	public function insertToEditor(event:ActionEvent):void {
 		//trace(event.value);
 		editor.insert(event.value);
+		isSaved = false;
 		updateIcons();
 	}
 
@@ -317,9 +354,9 @@ public class EditorApp extends WindowXP{
 
 
 	private function updateIcons(){
-		// verify the new/save cut/copy undo/redo icons
-		if(!toolbars.iconMap["menu_file_new"].isEnableElement("menu_file_new")){
-			toolbars.iconMap["menu_file_new"].enableElement("menu_file_new");
+		if(isSaved){
+			toolbars.iconMap["menu_file_save"].disableElement("menu_file_save");
+		}else{
 			toolbars.iconMap["menu_file_save"].enableElement("menu_file_save");
 		}
 		if(editor.mem.hasPrev()){
@@ -344,6 +381,9 @@ public class EditorApp extends WindowXP{
 		_statusBox.setHtml("<p align='right'><b>MathML Editor - www.learn-math.info</b></p>");
 	}
 
-
+	public function setMathML(mathML:String) {
+		editor.newFormula();
+		editor.insert(mathML);
+	}	
 }
 }
