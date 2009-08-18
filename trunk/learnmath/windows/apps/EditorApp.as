@@ -34,28 +34,39 @@ public class EditorApp extends WindowXP{
 	var workingPannelW;
 	var workingPannelH;
 	
-	var toolbarsManager:Toolbars = new Toolbars();
+	var toolbarsManager:Toolbars = new EditorToolbars();
 	
 	var isSaved:Boolean = true;
+	var maxWidth:int = 400;
+	var maxHeight:int = 400;
 
 	public function EditorApp(parent:MovieClip, x:int, y:int, _width:int, _height:int){
+		maxWidth = _width;
+		maxHeight = _height;
 		name = "MathML Editor";
 		super(parent, new LittleIconMC(), x, y, _width, _height);
 		this.pannel.addEventListener(ToolbarCustomEvent.EXECUTE, showToolbars);
 		this.pannel.addEventListener(ActionEvent.INSERT, insertToEditor);
 		
 		//create the menu
+		var styleN:Style = new Style();
+		styleN.font = "times";
+		styleN.size = 8;
+		styleN.color = "#000000"				
+		
 		menuBar = new MenuBar();
 		var m1:MenuGroup = new MenuGroup("File", "menu_file");
 		m1.addMenuList(new MenuItem("New", "menu_file_new"));
-		m1.addMenuList(new MenuItem("Open...", "menu_file_open"));
-		m1.addMenuList(new MenuItem("Save", "menu_file_save"));
+		m1.addMenuList(new MenuItem("Open by Javascript", "menu_file_open"));
+		m1.addMenuList(new MenuItem("Save by Javascript", "menu_file_save"));
+		m1.addSeparator();
 		m1.addMenuList(new MenuItem("Close", "menu_file_close"));
 		menuBar.addMenuList(m1);
 		
 		var m2:MenuGroup = new MenuGroup("Edit", "menu_edit");
 		m2.addMenuList(new MenuItem("Undo", "menu_edit_undo"));
 		m2.addMenuList(new MenuItem("Redo", "menu_edit_redo"));
+		m2.addSeparator();
 		m2.addMenuList(new MenuItem("Cut", "menu_edit_cut"));
 		m2.addMenuList(new MenuItem("Copy", "menu_edit_copy"));
 		m2.addMenuList(new MenuItem("Paste", "menu_edit_paste"));		
@@ -65,37 +76,49 @@ public class EditorApp extends WindowXP{
 		var m5:MenuGroup = new MenuGroup("Help", "menu_help");
 		m5.addMenuList(new MenuItem("Commands", "menu_help_comm"));
 		m5.addMenuList(new MenuItem("MathML", "menu_help_mathml"));
+		m5.addSeparator();
 		m5.addMenuList(new MenuItem("About MathML Editor...", "menu_help_about"));
 		menuBar.addMenuList(m5);
 		
 		
-		Toolbars.init();
+		toolbarsManager.init();
 		toolbars = new ToolbarsBean();
 		var tool1:ToolbarBean = new ToolbarBean();
 		tool1.position="LEFT";
 		tool1.addElement(new Equation2(17, 19), "toolbar_Equation1", true);
 		tool1.addElement(new Equation29(17, 19), "toolbar_Equation2", true);
-		//tool1.addElement(new Equation10(17, 19));
-		//tool1.addElement(new Equation43(17, 19));
 		tool1.addElement(new Fraction1(19, 19), "toolbar_Fraction1", true);
 		tool1.addElement(new Superscript3(19, 19), "toolbar_Superscript", true);
-		//tool1.addElement(new Superscript6(19, 19));
 		tool1.addElement(new Fence1(19, 19), "toolbar_Fence", true);
-		//tool1.addElement(new Fence12(19, 19));
 		tool1.addElement(new SumGroup23(19, 19), "toolbar_Sum", true);
-		//tool1.addElement(new SumGroup11(19, 19));
 		tool1.addElement(new Integral2(19, 19), "toolbar_Integral1", true);
 		tool1.addElement(new Integral12(19, 19), "toolbar_Integral2", true);
-		//tool1.addElement(new Integral51(19, 19));
-		//tool1.addElement(new Integral62(19, 19));
-		//tool1.addElement(new Accent1(17, 19));
 		tool1.addElement(new Accent10(17, 19), "toolbar_Accent", true);
-		//tool1.addElement(new Accent17(17, 19));
 		tool1.addElement(new Matrix6(19, 19), "toolbar_Matrix", true);
-		tool1.addElement(new LittleChar11(18, 19), "toolbar_CharsL", true);
-		tool1.addElement(new BigChar21(18, 19), "toolbar_CharsB", true);
 		tool1.addSpace();
 
+		var tool6:ToolbarBean = new ToolbarBean();
+		tool6.position="TOP";
+		tool6.addElementMathML(new ButtonMathML("<mrow><mo>&#x03A9;</mo></mrow>", styleN, 19, 19), "toolbar_CharsL", true);
+		tool6.addElementMathML(new ButtonMathML("<mrow><mo>&#x00C0;</mo></mrow>", styleN, 19, 19), "toolbar_charsetF1", true);
+		tool6.addElementMathML(new ButtonMathML("<mrow><mo>&#x0100;</mo></mrow>", styleN, 19, 19), "toolbar_charset3", true);
+		tool6.addElementMathML(new ButtonMathML("<mrow><mo>&#x0141;</mo></mrow>", styleN, 19, 19), "toolbar_charset31", true);
+		tool6.addElementMathML(new ButtonMathML("<mrow><mo>&#x0181;</mo></mrow>", styleN, 19, 19), "toolbar_charset4", true);
+		tool6.addElementMathML(new ButtonMathML("<mrow><mo>&#x01C4;</mo></mrow>", styleN, 19, 19), "toolbar_charset41", true);		
+		tool6.addElementMathML(new ButtonMathML("<mrow><mo>&#x0200;</mo></mrow>", styleN, 19, 19), "toolbar_charset5", true);
+		tool6.addElementMathML(new ButtonMathML("<mrow><mo>&#x0243;</mo></mrow>", styleN, 19, 19), "toolbar_charset51", true);		
+		tool6.addElementMathML(new ButtonMathML("<mrow><mo>&#x0414;</mo></mrow>", styleN, 19, 19), "toolbar_charset9", true);
+		tool6.addElementMathML(new ButtonMathML("<mrow><mo>&#x0434;</mo></mrow>", styleN, 19, 19), "toolbar_charset91", true);
+		tool6.addSpace();
+								
+								
+		var tool7:ToolbarBean = new ToolbarBean();
+		tool7.position="LEFT";
+		tool7.addElementMathML(new ButtonMathML("<mrow><mo>&#x216B;</mo></mrow>", styleN, 19, 19), "toolbar_charset11", true);		
+		tool7.addElementMathML(new ButtonMathML("<mrow><mo>&#x25A7;</mo></mrow>", styleN, 19, 19), "toolbar_charset10", true);
+		tool7.addSpace();		
+		
+								
 		var tool2:ToolbarBean = new ToolbarBean();
 		tool2.addElement(new NewIcon(18, 19), "menu_file_new", true);
 		tool2.addElement(new OpenIcon(19, 19), "menu_file_open", true);
@@ -146,12 +169,27 @@ public class EditorApp extends WindowXP{
 		tool4.addElement(new Italic(19, 19), "menu_style_italic", true);
 		tool4.addSpace();
 		tool4.addColorPicker("menu_style_color");
+		tool4.addElement(new CheckSIcon(1, 1), "menu_view_box", true);
 		tool4.addSpace();
+		
+		var tool5:ToolbarBean = new ToolbarBean();
+		tool5.position="BOTTOM";
+		tool5.acceptedPosition = "TOP;BOTTOM"
+		
+		tool5.addElement(new SinIcon(1, 1), "toolbar_trigo_sin", true);
+		tool5.addElement(new ArcsinIcon(1, 1), "toolbar_trigo_arcsin", true);		
+		tool5.addElement(new Sin1Icon(1, 1), "toolbar_trigo_sin1", true);		
+		tool5.addElement(new SinhIcon(1, 1), "toolbar_trigo_sinh", true);		
+		tool5.addElement(new ArsinhIcon(1, 1), "toolbar_trigo_arsinh", true);				
+		tool5.addElement(new Sinh1Icon(1, 1), "toolbar_trigo_sinh1", true);		
 		
 		toolbars.addToolbar(tool2);
 		toolbars.addToolbar(tool3);
 		toolbars.addToolbar(tool4);
+		toolbars.addToolbar(tool6);
+		toolbars.addToolbar(tool5);
 		toolbars.addToolbar(tool1);
+		toolbars.addToolbar(tool7);
 		
 		sp = new ScrollPane();
 		drawZone = new MovieClip();
@@ -163,7 +201,7 @@ public class EditorApp extends WindowXP{
 		sp.source = drawZone;
 		
 		formulaMc = new MovieClip();
-		formulaMc.x = 150;
+		formulaMc.x = 180;
 		formulaMc.y = 100;
 		
 		drawZone.addChild(formulaMc);
@@ -265,6 +303,13 @@ public class EditorApp extends WindowXP{
 			}else if(event.tPosition=="RIGHT"){
 				tPannel.pannel.x = p.x - tPannel.pannel.width - 3;
 			}
+			//trace("tPannel.pannel.x:" + tPannel.pannel.x + " tPannel.pannel.width:" + tPannel.pannel.width + " pannel.width:" + pannel.width);
+			if((tPannel.pannel.x + tPannel.pannel.width)> maxWidth){
+				tPannel.pannel.x = maxWidth - tPannel.pannel.width;
+			}
+			if((tPannel.pannel.y + tPannel.pannel.height)> maxHeight){
+				tPannel.pannel.y = maxHeight - tPannel.pannel.height;
+			}
 		}else if(event.menuId=="menu_file_new"){
 			editor.newFormula();
 		}else if(event.menuId=="menu_file_open"){
@@ -317,6 +362,14 @@ public class EditorApp extends WindowXP{
 			style.color = event.value;
 			editor.changeStyle(style);
 			isSaved = false;
+		}else if(event.menuId=="menu_view_box"){
+			editor.allowDrawRectangle = !editor.allowDrawRectangle;
+			editor.redrawFormula();
+			if(editor.allowDrawRectangle){
+				toolbars.iconMap["menu_view_box"].changeIcon("menu_view_box", new CheckSIcon(1, 1));
+			}else{
+				toolbars.iconMap["menu_view_box"].changeIcon("menu_view_box", new CheckIcon(1, 1));				
+			}
 		}
 		updateIcons();
 	}
@@ -343,7 +396,6 @@ public class EditorApp extends WindowXP{
 	}
 
 	public function insertToEditor(event:ActionEvent):void {
-		//trace(event.value);
 		editor.insert(event.value);
 		isSaved = false;
 		updateIcons();
@@ -374,16 +426,31 @@ public class EditorApp extends WindowXP{
 		}else{
 			toolbars.iconMap["menu_edit_paste"].disableElement("menu_edit_paste");
 		}
-
+		updateStatus();
 	}
 	
 	public override function redrawStatusBar(_statusBox:StatusBox):void {
-		_statusBox.setHtml("<p align='right'><b>MathML Editor - www.learn-math.info</b></p>");
+		//_statusBox.setHtml("<p align='right'><b>MathML Editor - www.learn-math.info</b></p>");
+		updateStatus();
 	}
 
 	public function setMathML(mathML:String) {
 		editor.newFormula();
 		editor.insert(mathML);
 	}	
+	
+	public function updateStatus():void {
+		var c:XML = editor.getCurrentNode();
+		var s:String = c.localName().toLowerCase();
+		
+		while(true){
+			c = c.parent();
+			if(c==null) break;
+			s = c.localName().toLowerCase() + " / " + s;
+		}
+		statusBox.setHtml(s);
+		
+	}
+	
 }
 }

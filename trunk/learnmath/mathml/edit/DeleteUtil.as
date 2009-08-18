@@ -16,7 +16,41 @@ import learnmath.mathml.edit.style.*;
 */
 public class DeleteUtil{
 	
+	
 	public static function deleteGarbage(xml:XML):void{
+		deleteMrowWithOneChildMrow(xml);
+		mergeMTextNearMtext(xml);		
+	}
+	
+	public static function mergeMTextNearMtext(xml:XML):void{
+		var children:XMLList = xml.children();
+		var lastMText:XML;
+		for(var i:int=0; i<children.length(); i++){
+			var n:XML = children[i];
+			mergeMTextNearMtext(n);
+			
+			if(n.localName()==null) continue;
+			if(n.attribute("selected")[0]==true) continue;
+			
+			if(n.localName().toLowerCase()=='mtext'){
+				if(lastMText==null){
+					lastMText = n;
+				}else{
+					if(n.children()[0]!="..."){
+						lastMText.children()[0] = lastMText.children()[0].toXMLString() + n.children()[0].toXMLString();
+						delete lastMText.attribute("manager")[0];
+					}
+					delete n.parent().children()[ n.childIndex() ];
+				}
+			}else{
+				lastMText = null;
+			}
+		}
+	}
+	
+
+	
+	public static function deleteMrowWithOneChildMrow(xml:XML):void{
 		//search for mrow with one child
 		var search:Boolean = true;
 		do{
@@ -42,6 +76,7 @@ public class DeleteUtil{
 		for(var i:int=0; i<children.length(); i++){
 			var n:XML = children[i];
 			if(n.localName()==null) continue;
+			if(n.attribute("selected")[0]==true) continue;
 			
 			if(n.localName().toLowerCase()=='mrow' && n.children().length()==1 && n.children()[0].localName().toLowerCase()=="mrow"){
 				return n;

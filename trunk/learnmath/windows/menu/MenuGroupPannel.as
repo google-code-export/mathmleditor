@@ -1,4 +1,4 @@
-package learnmath.windows.menu{
+﻿package learnmath.windows.menu{
 /*-------------------------------------------------------------
 	Created by: Ionel Alexandru 
 	Mail: ionel.alexandru@gmail.com
@@ -17,18 +17,40 @@ public class MenuGroupPannel extends BorderPannel{
 	var tfOver:TextFormat;
 
 	public function MenuGroupPannel(_parent:MovieClip, _x:int, _y:int, menuGroup:MenuGroup, menuBarPannel:MenuBarPannel){
-		super(_parent, _x, _y, 175, menuGroup.itemList.length*18 + 4);
+		var list = menuGroup.itemList;
+		
+		var maxWidth:int = 8;
+		for(var j=0; j<list.length; j++){
+			if(list[j] is String){
+				maxWidth = maxWidth + 7;
+				continue;
+			}
+			maxWidth = maxWidth + 18;
+		}
+				
+		super(_parent, _x, _y, 175, maxWidth);
 		tf = ConfigManager.getTextFormatForMenu();
 		tfOver = ConfigManager.getTextFormatForMenuOver();
 		
-		var list = menuGroup.itemList;
+		var lastY:int = 4;
 		for(var i=0; i<list.length; i++){
+			if(list[i] is String){
+				pannel.graphics.lineStyle(1,0x847f7b);
+				pannel.graphics.moveTo(5, lastY+3);
+				pannel.graphics.lineTo(width-5, lastY+4);
+				pannel.graphics.lineStyle(1,0xffffff);
+				pannel.graphics.moveTo(5, lastY+4);
+				pannel.graphics.lineTo(width-5, lastY+5);
+				
+				lastY = lastY + 7;
+				continue;
+			}
 			var mcText:MovieClip = new MovieClip();
 			mcText.menuBarPannel = menuBarPannel;
 			mcText.item=list[i];
 			
 			mcText.mouseChildren = false;
-			mcText.y = i*18 + 2;
+			mcText.y = lastY ;
 			
 			
 			mcText.addEventListener(MouseEvent.MOUSE_OVER, drawOverItem);
@@ -47,6 +69,7 @@ public class MenuGroupPannel extends BorderPannel{
 			mcText.textMc = t;
 			
 			drawNormal(mcText);			
+			lastY = lastY + 18;
 			
 			
 		}

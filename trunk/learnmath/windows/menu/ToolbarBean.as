@@ -8,6 +8,7 @@ import flash.display.*;
 import flash.events.*;
 import myLib.data.*;
 import learnmath.windows.comp.*;
+import learnmath.windows.elements.buttons.*;
 
 public class ToolbarBean{
 
@@ -46,7 +47,27 @@ public class ToolbarBean{
 		c.customHeight = m.height;
 		iconList[iconList.length] = c;
 	}
+	public function addElementMathML(button:ButtonMathML, eventId:String, enabled:Boolean):void{
+		var m:MovieClip = new MovieClip();
 
+		button.getButtonMC().mouseEnabled = false;
+		button.getButtonMC().mouseChildren = false;
+		m.addChild(button.getButtonMC());
+		iconMap[eventId] = m;
+
+		if(enabled){
+			enableElement(eventId);
+		}else{
+			disableElement(eventId);
+		}
+		
+		var c:MovieClip = new MovieClip();
+		c.addChild(m);
+		c.isIcon = true;
+		c.customWidth = m.width;
+		c.customHeight = m.height;
+		iconList[iconList.length] = c;
+	}
 	public function addSelectField(eventId:String, enabled:Boolean, list:Array, selected:int):void{
 
 		var combo:MyComboBox = new MyComboBox(new SimpleCollection(list));
@@ -93,19 +114,19 @@ public class ToolbarBean{
 	}
 
 	private function clickOverMenu(event:MouseEvent):void {
-		var mc = event.target;
+		var mc = event.currentTarget;
 		mc.x = -1;
 		mc.y = -1;
 	}
 
 	private function clickDownMenu(event:MouseEvent):void {
-		var mc = event.target;
+		var mc = event.currentTarget;
 		mc.x = 1;
 		mc.y = 1;
 	}
 
 	private function clickUpMenu(event:MouseEvent):void {
-		var mc = event.target;
+		var mc = event.currentTarget;
 		mc.x = 0;
 		mc.y = 0;
 	}
