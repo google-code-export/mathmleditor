@@ -17,7 +17,7 @@ import flash.ui.*;
 public class ToolsPannel extends WindowXP{
 	
 	public var haveBeenMoved = false;
-	var nbOfImagesOnRow = 7;
+	var toolWidth = 180;;
 	var imgList:Array
 	var values:Array
 	public var bClose:ButtonClosePanel;
@@ -32,9 +32,44 @@ public class ToolsPannel extends WindowXP{
 		if(values==null){
 			values = new Array();
 		}
-		var w = nbOfImagesOnRow*19 + 6;
-		var h = Math.ceil(imgList.length/nbOfImagesOnRow) * 19 + 16;
-		super(parent, null, x, y, w, h);
+		var w = toolWidth;
+		var maxWidth = 0;
+		var h = 17 + 20;
+		var calcWidth = 5 ;
+		for(var i:int=0; i<imgList.length; i++){
+			var m:MovieClip = new MovieClip();
+			
+			var widthComp = 0;
+			if(imgList[i] is ButtonMathML){
+				var b:ButtonMathML = ButtonMathML(imgList[i]);
+				widthComp = b.width+2;
+				if(b.height>19){
+					h = h + b.height-19;
+				}
+			}else{
+				var img:Bitmap = new Bitmap(imgList[i]);
+				m.addChild(img);
+				widthComp = 21;
+			}
+			if((calcWidth+widthComp+5)>toolWidth){
+				if((calcWidth+3)>maxWidth){
+					maxWidth = calcWidth+3;
+				}
+				h = h + 20;
+				calcWidth = 5;
+			}
+			calcWidth = calcWidth +widthComp;
+			if(calcWidth>maxWidth){
+				maxWidth = calcWidth +3;
+			}
+			
+		}
+		
+		if(maxWidth==0){
+			maxWidth = calcWidth + 3;
+		}
+		
+		super(parent, null, x, y, maxWidth, h);
 		id = _id;
 	}
 
@@ -99,48 +134,66 @@ public class ToolsPannel extends WindowXP{
 		titleBar.addEventListener(MouseEvent.MOUSE_UP, dropIt);
 		titleBar.name="TitleBar";
 
-		var startX = 3;
-		var startY = 13;
-		var rowCount = 0;
-		var lineCount = 0;
+		var initStartX = 5;
+		var startX = initStartX;
+		var startY = 14;
 		for(var i:int=0; i<imgList.length; i++){
-			var img:Bitmap = new Bitmap(imgList[i]);
 			var m:MovieClip = new MovieClip();
-			m.addChild(img);
+			
+			var compWidth = 0;
+			var compHeight =0
+			if(imgList[i] is ButtonMathML){
+				var b:ButtonMathML = ButtonMathML(imgList[i]);
+				compWidth = b.width + 2;
+				if(b.height>19){
+					compHeight = b.height;
+				}
+				m.addChild(b.getButtonMC());
+			}else{
+				var img:Bitmap = new Bitmap(imgList[i]);
+				m.addChild(img);
+				compWidth = 21;
+			}
 			m.indexIcon = i;
 			m.addEventListener(MouseEvent.MOUSE_OVER, clickOverMenu);
 			m.addEventListener(MouseEvent.MOUSE_DOWN, clickDownMenu);
 			m.addEventListener(MouseEvent.MOUSE_OUT, clickUpMenu);
 			m.addEventListener(MouseEvent.MOUSE_UP, clickUpMenu);			
 			
+			if((startX+compWidth+5)>toolWidth){
+				startY = startY + 20;
+				startX = initStartX;
+			}			
+			
 			var cont:MovieClip = new MovieClip();
-			cont.x = startX + rowCount*19 + int((19-m.width)/2);
-			cont.y = startY + lineCount*19;
+			cont.x = startX;// + rowCount*19 + int((19-m.width)/2);
+			cont.y = startY;// + lineCount*19;
 			cont.addChild(m);
 			pannel.addChild(cont);
-			rowCount++;
-			if(rowCount>=nbOfImagesOnRow){
-				rowCount = 0;
-				lineCount++;
+			
+			startX = startX + compWidth;			
+			if(compHeight>0){
+				startY = startY + compHeight-19;
 			}
+
 		}
 	}
 	
 	private function clickOverMenu(event:MouseEvent):void {
-		var mc = event.target;
+		var mc = event.currentTarget;
 		mc.x = -1;
 		mc.y = -1;
 	}
 
 	private function clickDownMenu(event:MouseEvent):void {
-		var mc = event.target;
+		var mc = event.currentTarget;
 		mc.x = 1;
 		mc.y = 1;
 		pannel.parent.dispatchEvent(new ActionEvent(values[mc.indexIcon]));
 	}
 
 	private function clickUpMenu(event:MouseEvent):void {
-		var mc = event.target;
+		var mc = event.currentTarget;
 		mc.x = 0;
 		mc.y = 0;
 	}

@@ -30,8 +30,8 @@ public class EditML{
 	private var selectBox:SelectBox;
 	private var keyboardManager:KeyboardManager;
 	private var mouseManager:MouseManager;
-	private var needReDraw:Boolean = true;
 	private var needReDrawRectangle:Boolean = true;
+	public var allowDrawRectangle:Boolean = true;
 	
 	private var displayMathML:DisplayMathML;
 	private var secondTimer:Timer;
@@ -86,7 +86,6 @@ public class EditML{
 		pannel.name = "formula";
 		
 		drawRectangles();
-		needReDraw = false;
 		
 		var oldXML:XML = new XML(xml.toXMLString());
 		filterForCopy(oldXML);
@@ -159,6 +158,7 @@ public class EditML{
 
 	public function insert(child:String):void{
 		selectBox.insertBox(child);
+		DeleteUtil.deleteGarbage(xml);
 		drawFormula(_defaultStyle);
 	}
 
@@ -199,10 +199,16 @@ public class EditML{
 	
 
 	public function drawRectangles():void{
-		selectBox.drawRectangles(pannel);
+		if(allowDrawRectangle){
+			selectBox.drawRectangles(pannel);
+		}
 		needReDrawRectangle = false;
 	}
 
+	public function redrawFormula():void{
+		drawFormula(_defaultStyle);
+	}
+	
 	public function clear():void{
 		secondTimer.removeEventListener(TimerEvent.TIMER, onTick);
 		selectBox.clearCursor(pannel);
@@ -257,6 +263,8 @@ public class EditML{
 		event.currentTarget.stopDrag();
 	}
 	
-	
+	public function getCurrentNode():XML{
+		return selectBox.currentNode;
+	}
 }
 }

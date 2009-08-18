@@ -21,5 +21,9 @@ public class MenuGroup extends MenuItem{
 		itemList[itemList.length] = menuItem;
 	}
 	
+	public function addSeparator():void{
+		itemList[itemList.length] = "separator";
+	}
+	
 }
 }
