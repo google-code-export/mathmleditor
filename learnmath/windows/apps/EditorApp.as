@@ -103,10 +103,10 @@ public class EditorApp extends WindowXP{
 		tool6.addElementMathML(new ButtonMathML("<mrow><mo>&#x00C0;</mo></mrow>", styleN, 19, 19), "toolbar_charsetF1", true);
 		tool6.addElementMathML(new ButtonMathML("<mrow><mo>&#x0100;</mo></mrow>", styleN, 19, 19), "toolbar_charset3", true);
 		tool6.addElementMathML(new ButtonMathML("<mrow><mo>&#x0141;</mo></mrow>", styleN, 19, 19), "toolbar_charset31", true);
-		tool6.addElementMathML(new ButtonMathML("<mrow><mo>&#x0181;</mo></mrow>", styleN, 19, 19), "toolbar_charset4", true);
-		tool6.addElementMathML(new ButtonMathML("<mrow><mo>&#x01C4;</mo></mrow>", styleN, 19, 19), "toolbar_charset41", true);		
-		tool6.addElementMathML(new ButtonMathML("<mrow><mo>&#x0200;</mo></mrow>", styleN, 19, 19), "toolbar_charset5", true);
-		tool6.addElementMathML(new ButtonMathML("<mrow><mo>&#x0243;</mo></mrow>", styleN, 19, 19), "toolbar_charset51", true);		
+		//tool6.addElementMathML(new ButtonMathML("<mrow><mo>&#x0181;</mo></mrow>", styleN, 19, 19), "toolbar_charset4", true);
+		//tool6.addElementMathML(new ButtonMathML("<mrow><mo>&#x01C4;</mo></mrow>", styleN, 19, 19), "toolbar_charset41", true);		
+		//tool6.addElementMathML(new ButtonMathML("<mrow><mo>&#x0200;</mo></mrow>", styleN, 19, 19), "toolbar_charset5", true);
+		//tool6.addElementMathML(new ButtonMathML("<mrow><mo>&#x0243;</mo></mrow>", styleN, 19, 19), "toolbar_charset51", true);		
 		tool6.addElementMathML(new ButtonMathML("<mrow><mo>&#x0414;</mo></mrow>", styleN, 19, 19), "toolbar_charset9", true);
 		tool6.addElementMathML(new ButtonMathML("<mrow><mo>&#x0434;</mo></mrow>", styleN, 19, 19), "toolbar_charset91", true);
 		tool6.addSpace();
