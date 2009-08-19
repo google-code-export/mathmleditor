@@ -627,9 +627,13 @@ public class EditorToolbars extends Toolbars{
 		createToolbar("toolbar_charset41", "0x01c4", "0x01ff", style, "mtext");		
 		createToolbar("toolbar_charset5", "0x0200", "0x023f", style, "mtext");		
 		createToolbar("toolbar_charset51", "0x0240", "0x027f", style, "mtext");		
-		createToolbar("toolbar_charset9", "0x0400", "0x042f", style, "mtext");		
-		createToolbar("toolbar_charset91", "0x0430", "0x045f", style, "mtext");		
+		createToolbar("toolbar_charset9", "0x0401", "0x040C", style, "mtext");		
+		addToToolbarsName("toolbar_charset9", "0x040E", "0x042f", styleN, "mtext");		
 		
+		createToolbar("toolbar_charset91", "0x0430", "0x044f", style, "mtext");		
+		addToToolbarsName("toolbar_charset91", "0x0451", "0x045c", styleN, "mtext");		
+		addToToolbarsName("toolbar_charset91", "0x045e", "0x045f", styleN, "mtext");		
+								
 		createToolbar("toolbar_charset10", "0x25A0", "0x25AC", style, "mtext");		
 		addToToolbarsName("toolbar_charset10", "0x25B2", "0x25B3", styleN, "mtext");		
 		addToToolbarsName("toolbar_charset10", "0x25B6", "0x25B7", styleN, "mtext");		
